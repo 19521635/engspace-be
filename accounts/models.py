@@ -11,7 +11,7 @@ class User(AbstractUser):
 class UserProfile(models.Model):
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='profile')
-    dob = models.DateField()
+    dob = models.DateField(blank=True, null=True)
     website = models.URLField(blank=True, default="")
     bio = models.TextField(blank=True, max_length=100, default="")
     fb_url = models.URLField(blank=True, default="",
