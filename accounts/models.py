@@ -14,7 +14,8 @@ class UserProfile(models.Model):
     dob = models.DateField()
     website = models.URLField(blank=True, default="")
     bio = models.TextField(blank=True, max_length=100, default="")
-    fb_url = models.URLField(blank=True, default="")
+    fb_url = models.URLField(blank=True, default="",
+                             verbose_name="facebook url")
     avatar = models.ImageField(default="default.jpg", upload_to="profile_imgs")
 
     def __str__(self):
