@@ -1,10 +1,10 @@
-from django.views.decorators.csrf import requires_csrf_token
+from django.db.models import fields
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
-from .models import User
+from .models import User, UserProfile
 
 
-class UserSerializer(serializers.ModelSerializer):
+class UserSignUpSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(required=True, validators=[
                                    UniqueValidator(queryset=User.objects.all())])
     username = serializers.CharField(required=True, validators=[
@@ -13,13 +13,9 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('id', 'email', 'username', 'password',
-                  'first_name', 'last_name', 'is_staff')
-        extra_kwargs = {'password': {'write_only': True},
-                        'is_staff': {'read_only': True},
-                        'id': {'read_only': True},
-                        'first_name': {'required': True},
-                        'last_name': {'required': True}, }
+        fields = ('email', 'username', 'password',
+                  'first_name', 'last_name')
+        extra_kwargs = {'password': {'write_only': True}, }
 
     def create(self, validated_data):
         password = validated_data.pop('password', None)
@@ -28,3 +24,32 @@ class UserSerializer(serializers.ModelSerializer):
             instance.set_password(password)
         instance.save()
         return instance
+
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    dob = serializers.DateField(
+        source='profile.dob', required=False)
+    website = serializers.URLField(
+        source='profile.website', allow_blank=True, allow_null=True, required=False)
+    bio = serializers.CharField(
+        source='profile.bio', allow_blank=True, allow_null=True, required=False)
+    fb_url = serializers.URLField(
+        source='profile.fb_url', allow_blank=True, allow_null=True, required=False)
+    avatar = serializers.ImageField(source='profile.avatar', required=False)
+
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'first_name', 'last_name',
+                  'dob', 'website', 'bio', 'fb_url', 'avatar')
+
+    def update(self, instance, validated_data):
+        profile_data = validated_data.pop('profile', None)
+        UserProfile.objects.update_or_create(
+            user=instance, defaults=profile_data)
+        return super(UserProfileSerializer, self).update(instance, validated_data)
+
+
+class UserStatusSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('is_active', 'is_staff')
