@@ -1,4 +1,3 @@
-from django.db.models import fields
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 from .models import User, UserProfile
