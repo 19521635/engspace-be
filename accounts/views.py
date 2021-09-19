@@ -1,8 +1,7 @@
 from django.shortcuts import get_object_or_404, render
 from rest_framework import permissions, status, generics
-from rest_framework.views import APIView
 from rest_framework.response import Response
-from .serializers import UserProfileSerializer, UserSignUpSerializer, UserStatusSerializer
+from .serializers import UserFollowingSerializer, UserProfileSerializer, UserSignUpSerializer, UserStatusSerializer
 from .models import User
 # Create your views here.
 
@@ -18,16 +17,6 @@ class UserSignUpAPIView(generics.CreateAPIView):
         if serializers.is_valid(raise_exception=True):
             user = serializers.save()
             return Response(serializers.data, status=status.HTTP_201_CREATED)
-
-
-class UserDeleteAPIView(APIView):
-    """Admin View To Delete User"""
-    permission_classes = (permissions.IsAdminUser,)
-
-    def delete(self, request, pk, format='json'):
-        user = get_object_or_404(User, pk=pk)
-        user.delete()
-        return Response({'detail': 'User was deleted successfully.'}, status=status.HTTP_204_NO_CONTENT)
 
 
 class UserProfileAPIView(generics.RetrieveUpdateAPIView):
@@ -59,3 +48,17 @@ class UserStatusAPIView(generics.RetrieveAPIView):
         instance = request.user
         data = {'is_active': instance.is_active, 'is_staff': instance.is_staff}
         return Response(data, status=status.HTTP_200_OK)
+
+
+class UserFollowingAPIView(generics.RetrieveAPIView):
+    """View To Get User Followers/Following"""
+    serializer_class = UserFollowingSerializer
+    lookup_field = ('user_id')
+
+    def get(self, request, pk=None, *args, **kwargs):
+        if pk is None:
+            instance = request.user
+        else:
+            instance = get_object_or_404(User, pk=pk)
+        serializers = self.get_serializer(instance)
+        return Response(serializers.data)
