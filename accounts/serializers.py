@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
-from .models import User, UserProfile
+from .models import User, UserFollowing, UserProfile
 
 
 class UserSignUpSerializer(serializers.ModelSerializer):
@@ -58,12 +58,33 @@ class UserStatusSerializer(serializers.ModelSerializer):
         fields = ('is_active', 'is_staff')
 
 
+class UserFollowingCreateSerializer(serializers.ModelSerializer):
+    user = serializers.ReadOnlyField(source='user.id')
+
+    class Meta:
+        model = UserFollowing
+        fields = ('id', 'user', 'following_user')
+
+    def validate(self, data):
+        if self.context['request'].user == data['following_user']:
+            raise serializers.ValidationError(
+                "user and following_user shouldn't be same.")
+        return data
+
+    def create(self, validated_data):
+        instance, created = UserFollowing.objects.get_or_create(user=validated_data.get(
+            'user'), following_user=validated_data.get('following_user'))
+        if created:
+            instance.save()
+        return instance
+
+
 class UserFollowingSerializer(serializers.ModelSerializer):
     following = serializers.SlugRelatedField(
-        many=True, slug_field='following_user_id', read_only=True)
+        many=True, slug_field='following_user_id', queryset=UserFollowing.objects.all())
     followers = serializers.SlugRelatedField(
         many=True, slug_field='user_id', read_only=True)
 
     class Meta:
-        model = User
-        fields = ('followers', 'following')
+        model = UserFollowing
+        fields = ('id', 'followers', 'following')
