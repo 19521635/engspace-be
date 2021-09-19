@@ -36,11 +36,15 @@ class UserProfileSerializer(serializers.ModelSerializer):
     fb_url = serializers.URLField(
         source='profile.fb_url', allow_blank=True, allow_null=True, required=False)
     avatar = serializers.ImageField(source='profile.avatar', required=False)
+    following = serializers.SlugRelatedField(
+        many=True, slug_field='following_user_id', read_only=True)
+    followers = serializers.SlugRelatedField(
+        many=True, slug_field='user_id', read_only=True)
 
     class Meta:
         model = User
         fields = ('username', 'email', 'first_name', 'last_name',
-                  'dob', 'website', 'bio', 'fb_url', 'avatar')
+                  'dob', 'website', 'bio', 'fb_url', 'avatar', 'followers', 'following')
 
     def update(self, instance, validated_data):
         profile_data = validated_data.pop('profile', None)
@@ -53,3 +57,14 @@ class UserStatusSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('is_active', 'is_staff')
+
+
+class UserFollowingSerializer(serializers.ModelSerializer):
+    following = serializers.SlugRelatedField(
+        many=True, slug_field='following_user_id', read_only=True)
+    followers = serializers.SlugRelatedField(
+        many=True, slug_field='user_id', read_only=True)
+
+    class Meta:
+        model = User
+        fields = ('followers', 'following')
