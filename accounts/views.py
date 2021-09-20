@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404, render
 from rest_framework import permissions, status, generics
 from rest_framework.response import Response
-from .serializers import UserFollowingSerializer, UserProfileSerializer, UserSignUpSerializer, UserStatusSerializer, UserFollowingCreateSerializer
+from .serializers import UserFollowingSerializer, UserProfileDetailSerializer, UserProfileSerializer, UserProfileListSerializer, UserSignUpSerializer, UserStatusSerializer, UserFollowingCreateSerializer
 from .models import User, UserFollowing
 # Create your views here.
 
@@ -38,6 +38,18 @@ class UserProfileAPIView(generics.RetrieveUpdateAPIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data)
+
+
+class UserProfileListAPIView(generics.ListAPIView):
+    """View To Get List Of All Users"""
+    queryset = User.objects.all()
+    serializer_class = UserProfileListSerializer
+
+
+class UserProfileDetailAPIView(generics.RetrieveAPIView):
+    """View To Get Someone Profile Detail"""
+    queryset = User.objects.all()
+    serializer_class = UserProfileDetailSerializer
 
 
 class UserStatusAPIView(generics.RetrieveAPIView):

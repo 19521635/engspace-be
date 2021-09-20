@@ -1,3 +1,4 @@
+from django.db.models import fields
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 from .models import User, UserFollowing, UserProfile
@@ -50,6 +51,33 @@ class UserProfileSerializer(serializers.ModelSerializer):
         UserProfile.objects.update_or_create(
             user=instance, defaults=profile_data)
         return super(UserProfileSerializer, self).update(instance, validated_data)
+
+
+class UserProfileListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id', 'username')
+
+
+class UserProfileDetailSerializer(serializers.ModelSerializer):
+    dob = serializers.DateField(
+        source='profile.dob', required=False)
+    website = serializers.URLField(
+        source='profile.website', allow_blank=True, allow_null=True, required=False)
+    bio = serializers.CharField(
+        source='profile.bio', allow_blank=True, allow_null=True, required=False)
+    fb_url = serializers.URLField(
+        source='profile.fb_url', allow_blank=True, allow_null=True, required=False)
+    avatar = serializers.ImageField(source='profile.avatar', required=False)
+    following = serializers.SlugRelatedField(
+        many=True, slug_field='following_user_id', read_only=True)
+    followers = serializers.SlugRelatedField(
+        many=True, slug_field='user_id', read_only=True)
+
+    class Meta:
+        model = User
+        fields = ('username', 'first_name', 'last_name',
+                  'dob', 'website', 'bio', 'fb_url', 'avatar', 'followers', 'following')
 
 
 class UserStatusSerializer(serializers.ModelSerializer):
