@@ -44,7 +44,7 @@ class UserFollowing(models.Model):
                              on_delete=models.CASCADE, related_name="following")
     following_user = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='followers')
-    created_at = models.DateTimeField(auto_now_add=True)
+    date_created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         constraints = [
@@ -52,7 +52,7 @@ class UserFollowing(models.Model):
                 fields=['user', 'following_user'],  name="unique_followers")
         ]
 
-        ordering = ["-created_at"]
+        ordering = ["-date_created"]
 
     def __str__(self):
         return f'{self.user} follows {self.following_user}'
