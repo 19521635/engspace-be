@@ -10,7 +10,9 @@ class Folder(models.Model):
     description = models.TextField(blank=True, max_length=255, default="")
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
                              on_delete=CASCADE, related_name="folder")
-    created_at = models.DateTimeField(auto_now_add=True)
+    is_public = models.BooleanField(default=True, verbose_name="public")
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_updated = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.name
@@ -21,7 +23,9 @@ class Topic(models.Model):
     description = models.TextField(blank=True, max_length=255, default="")
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
                              on_delete=CASCADE, related_name="topic")
-    created_at = models.DateTimeField(auto_now_add=True)
+    is_public = models.BooleanField(default=True, verbose_name="public")
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_updated = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.name

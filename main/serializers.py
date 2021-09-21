@@ -8,7 +8,8 @@ class FolderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Folder
-        fields = ('id', 'name', 'description', 'created_at', 'user')
+        fields = ('id', 'is_public', 'name', 'description',
+                  'date_created', 'date_updated', 'user')
 
 
 class TopicSerializer(serializers.ModelSerializer):
@@ -16,4 +17,5 @@ class TopicSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Topic
-        fields = ('id', 'name', 'description', 'created_at', 'user')
+        fields = fields = ('id', 'is_public', 'name', 'description',
+                           'date_created', 'date_updated', 'user')
