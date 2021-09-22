@@ -6,4 +6,5 @@ urlpatterns = [
     path("folders/<int:pk>/", FolderDetailAPIView.as_view()),
     path("topics/", TopicListAPIView.as_view()),
     path("topics/<int:pk>/", TopicDetailAPIView.as_view()),
+
 ]
