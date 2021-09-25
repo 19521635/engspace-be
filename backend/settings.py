@@ -83,17 +83,18 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {
-    'default': dj_database_url.config(
-        default="postgres://dymuwkzgvfcurv:fef343eec5a781967c85bd29ba89eb46b00c040e043a4de9574abd918f82738e@ec2-54-145-110-118.compute-1.amazonaws.com:5432/d1i6dmvcnh9261", conn_max_age=600
-    )
-    # {
-    # 'ENGINE': 'django.db.backends.postgresql_psycopg2',
-    # 'NAME': 'engspace',
-    # 'USER': 'postgres',
-    # 'PASSWORD': 'postgres',
-    # 'HOST': 'localhost',
-    # 'PORT': '5432'
-    # }
+    'default':
+    # dj_database_url.config(
+    #     default="postgres://dymuwkzgvfcurv:fef343eec5a781967c85bd29ba89eb46b00c040e043a4de9574abd918f82738e@ec2-54-145-110-118.compute-1.amazonaws.com:5432/d1i6dmvcnh9261", conn_max_age=600
+    # )
+    {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'engspace',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
+        'HOST': 'localhost',
+        'PORT': '5432'
+    }
 }
 
 
