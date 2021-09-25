@@ -15,12 +15,30 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from django.urls.conf import include
+from django.urls.conf import include, re_path
 from django.conf import settings
 from django.conf.urls.static import static
+# swagger docs
+from rest_framework import permissions
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
 
+schema_view = get_schema_view(
+    openapi.Info(
+        title="EngSpace API",
+        default_version='v1',
+        description="Welcome to the EngSpace API",
+        terms_of_service="https://engspace-be.herokuapp.com/",
+        contact=openapi.Contact(email="19521635@gm.uit.edu.vn"),
+        license=openapi.License(name="Awesome IP"),
+    ),
+    public=True,
+    permission_classes=(permissions.AllowAny,),
+)
 
 urlpatterns = [
+    path('', schema_view.with_ui('redoc', cache_timeout=0),
+         name='schema-redoc'),
     path('admin/', admin.site.urls),
     path("api/admin/", include('admin.urls')),
     path('api/users/', include('accounts.urls')),
