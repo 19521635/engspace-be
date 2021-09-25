@@ -22,7 +22,7 @@ class Set(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True, max_length=255, default="")
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
-                             on_delete=CASCADE, related_name="user_set")
+                             on_delete=CASCADE, related_name="set")
     topic = models.ForeignKey(Topic, on_delete=CASCADE,
                               related_name="topic_set")
     is_public = models.BooleanField(default=True, verbose_name="public")
@@ -38,14 +38,14 @@ class SetDetail(models.Model):
     class TextLang(models.TextChoices):
         english = "en", "English"
         vietnamese = "vi", "Vietnamese"
-    set = models.ForeignKey(Set, on_delete=CASCADE, related_name="term")
+    set = models.ForeignKey(Set, on_delete=CASCADE, related_name="set_detail")
     image = models.ImageField(blank=True, upload_to=term_image_upload_to)
     term = models.TextField(blank=False)
     definition = models.TextField(blank=False)
     term_lang = models.CharField(
-        max_length="10", choices=TextLang.choices, default=TextLang.english)
+        max_length=10, choices=TextLang.choices, default=TextLang.english)
     definition_lang = models.CharField(
-        max_length="10", choices=TextLang.choices, default=TextLang.vietnamese)
+        max_length=10, choices=TextLang.choices, default=TextLang.vietnamese)
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now_add=True)
 
@@ -56,7 +56,7 @@ class Folder(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
                              on_delete=CASCADE, related_name="folder")
     is_public = models.BooleanField(default=True, verbose_name="public")
-    sets = models.ManyToManyField(Set, blank=True)
+    sets = models.ManyToManyField(Set, blank=True, related_name="set_folder")
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now_add=True)
 
