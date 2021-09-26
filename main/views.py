@@ -4,12 +4,21 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from .serializers import FolderSerializer, SetDetailSerializer, SetSerializer, TopicSerializer, FolderSetSerializer
 from .models import Folder, Topic, Set, SetDetail
+from drf_yasg.utils import swagger_auto_schema
 # Create your views here.
 
 
 class FolderListAPIView(generics.ListCreateAPIView):
     serializer_class = FolderSerializer
     queryset = Folder.objects.all()
+
+    @swagger_auto_schema(operation_summary="Retrieve a list of all folders")
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
+
+    @swagger_auto_schema(operation_summary="Save a new folder")
+    def post(self, request, *args, **kwargs):
+        return super().post(request, *args, **kwargs)
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
@@ -19,16 +28,23 @@ class FolderDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = FolderSerializer
     queryset = Folder.objects.all()
 
+    @swagger_auto_schema(operation_summary="Retrieve a folder detail for this folder id")
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
+
+    @swagger_auto_schema(operation_summary="Update an existing folder detail for this folder id")
     def put(self, request, pk, *args, **kwargs):
         instance = get_object_or_404(
             request.user.folder, pk=pk)
         return self.update(request, *args, **kwargs)
 
+    @swagger_auto_schema(operation_summary="Update partial an existing folder detail for this folder id")
     def patch(self, request, pk, *args, **kwargs):
         instance = get_object_or_404(
             request.user.folder, pk=pk)
         return self.partial_update(request, *args, **kwargs)
 
+    @swagger_auto_schema(operation_summary="Delete the specified folder by folder id")
     def delete(self, request, pk, *args, **kwargs):
         instance = get_object_or_404(
             request.user.folder, pk=pk)
@@ -37,6 +53,7 @@ class FolderDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
 
 class FolderSetAPIVIew(APIView):
 
+    @swagger_auto_schema(operation_summary="Save an existing set for this folder id")
     def post(self, request, format='json'):
         serializer = FolderSetSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -46,6 +63,7 @@ class FolderSetAPIVIew(APIView):
         Folder.add(folder, set)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
+    @swagger_auto_schema(operation_summary="Delete the specified set in folder by set id and folder id")
     def delete(self, request, format='json'):
         serializer = FolderSetSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -69,6 +87,14 @@ class TopicListAPIView(generics.ListCreateAPIView):
     queryset = Topic.objects.all()
     permission_classes = (TopicCustomPermissions,)
 
+    @swagger_auto_schema(operation_summary="Retrieve a list of all topics")
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
+
+    @swagger_auto_schema(operation_summary="Save a new topic")
+    def post(self, request, *args, **kwargs):
+        return super().post(request, *args, **kwargs)
+
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
@@ -78,16 +104,23 @@ class TopicDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Topic.objects.all()
     permission_classes = (TopicCustomPermissions,)
 
+    @swagger_auto_schema(operation_summary="Retrieve a topic detail for this topic id")
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
+
+    @swagger_auto_schema(operation_summary="Update an existing topic detail for this topic id")
     def put(self, request, pk, *args, **kwargs):
         instance = get_object_or_404(
             request.user.topic, pk=pk)
         return self.update(request, *args, **kwargs)
 
+    @swagger_auto_schema(operation_summary="Update partial an existing topic detail for this topic id")
     def patch(self, request, pk, *args, **kwargs):
         instance = get_object_or_404(
             request.user.topic, pk=pk)
         return self.partial_update(request, *args, **kwargs)
 
+    @swagger_auto_schema(operation_summary="Delete the specified topic by topic id")
     def delete(self, request, pk, *args, **kwargs):
         instance = get_object_or_404(
             request.user.topic, pk=pk)
@@ -98,6 +131,14 @@ class SetListAPIView(generics.ListCreateAPIView):
     serializer_class = SetSerializer
     queryset = Set.objects.all()
 
+    @swagger_auto_schema(operation_summary="Retrieve a list of all sets")
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
+
+    @swagger_auto_schema(operation_summary="Save a new set")
+    def post(self, request, *args, **kwargs):
+        return super().post(request, *args, **kwargs)
+
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
@@ -106,16 +147,23 @@ class SetDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = SetSerializer
     queryset = Set.objects.all()
 
+    @swagger_auto_schema(operation_summary="Retrieve a set detail for this set id")
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
+
+    @swagger_auto_schema(operation_summary="Update an existing set detail for this set id")
     def put(self, request, pk, *args, **kwargs):
         instance = get_object_or_404(
             request.user.set, pk=pk)
         return self.update(request, *args, **kwargs)
 
+    @swagger_auto_schema(operation_summary="Update partial an existing set detail for this set id")
     def patch(self, request, pk, *args, **kwargs):
         instance = get_object_or_404(
             request.user.set, pk=pk)
         return self.partial_update(request, *args, **kwargs)
 
+    @swagger_auto_schema(operation_summary="Delete the specified set by set id")
     def delete(self, request, pk, *args, **kwargs):
         instance = get_object_or_404(
             request.user.set, pk=pk)
@@ -126,24 +174,38 @@ class SetDetailListAPIView(generics.ListCreateAPIView):
     serializer_class = SetDetailSerializer
     queryset = SetDetail.objects.all()
 
+    @swagger_auto_schema(operation_summary="Retrieve a list of all set details")
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
+
+    @swagger_auto_schema(operation_summary="Save a new set detail")
+    def post(self, request, *args, **kwargs):
+        return super().post(request, *args, **kwargs)
+
 
 class SetDetailDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = SetDetailSerializer
     queryset = SetDetail.objects.all()
-    """Fix this, no attribute 'set_detail'"""
 
+    @swagger_auto_schema(operation_summary="Retrieve a set detail for this set detail id")
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
+
+    @swagger_auto_schema(operation_summary="Update an existing set detail for this set detail id")
     def put(self, request, pk, *args, **kwargs):
         set_detail = get_object_or_404(SetDetail, pk=pk)
         instance = get_object_or_404(
             request.user.set, pk=set_detail.set.id)
         return self.update(request, *args, **kwargs)
 
+    @swagger_auto_schema(operation_summary="Update partial an existing set detail for this set detail id")
     def patch(self, request, pk, *args, **kwargs):
         set_detail = get_object_or_404(SetDetail, pk=pk)
         instance = get_object_or_404(
             request.user.set, pk=set_detail.set.id)
         return self.partial_update(request, *args, **kwargs)
 
+    @swagger_auto_schema(operation_summary="Delete the specified set detail by set detail id")
     def delete(self, request, pk, *args, **kwargs):
         set_detail = get_object_or_404(SetDetail, pk=pk)
         instance = get_object_or_404(
