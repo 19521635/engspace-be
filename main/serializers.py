@@ -7,8 +7,7 @@ from .models import Folder, Topic, Set, SetDetail
 
 
 class FolderSerializer(serializers.ModelSerializer):
-    name = serializers.CharField(required=True, validators=[
-                                 UniqueValidator(queryset=Folder.objects.all())])
+    name = serializers.CharField(required=True)
     user = serializers.ReadOnlyField(source='user.id')
 
     class Meta:
