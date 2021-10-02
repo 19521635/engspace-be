@@ -1,15 +1,20 @@
 from django.shortcuts import get_object_or_404
-from rest_framework import permissions, status
+from rest_framework import permissions, status, generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from accounts.models import User
+from accounts.models import *
+from .serializers import *
 
 
-class UserDeleteAPIView(APIView):
-    """Admin View To Delete User"""
+class UserListAPIView(generics.ListCreateAPIView):
+    """Admin View To Get List Or Create User"""
     permission_classes = (permissions.IsAdminUser,)
+    queryset = User.objects.all()
+    serializer_class = UserListAdminSerializer
 
-    def delete(self, request, pk, format='json'):
-        user = get_object_or_404(User, pk=pk)
-        user.delete()
-        return Response({'detail': 'User was deleted successfully.'}, status=status.HTTP_204_NO_CONTENT)
+
+class UserDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
+    """Admin View To RetrieveUpdateDestroy User"""
+    permission_classes = (permissions.IsAdminUser,)
+    queryset = User.objects.all()
+    serializer_class = UserDetailAdminSerializer
