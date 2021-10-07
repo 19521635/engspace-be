@@ -180,6 +180,9 @@ class SetDetailListAPIView(generics.ListCreateAPIView):
 
     @swagger_auto_schema(operation_summary="Save a new set detail")
     def post(self, request, *args, **kwargs):
+        serializer = SetDetailSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        get_object_or_404(request.user.set, pk=request.data['set'])
         return super().post(request, *args, **kwargs)
 
 
