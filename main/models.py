@@ -12,7 +12,7 @@ class Topic(models.Model):
                              on_delete=CASCADE, related_name="topic")
     is_public = models.BooleanField(default=True, verbose_name="public")
     date_created = models.DateTimeField(auto_now_add=True)
-    date_updated = models.DateTimeField(auto_now_add=True)
+    date_updated = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.name
@@ -27,7 +27,7 @@ class Set(models.Model):
                               related_name="topic_set")
     is_public = models.BooleanField(default=True, verbose_name="public")
     date_created = models.DateTimeField(auto_now_add=True)
-    date_updated = models.DateTimeField(auto_now_add=True)
+    date_updated = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.name
@@ -50,7 +50,7 @@ class SetDetail(models.Model):
     definition_lang = models.CharField(
         max_length=10, choices=TextLang.choices, default=TextLang.vietnamese)
     date_created = models.DateTimeField(auto_now_add=True)
-    date_updated = models.DateTimeField(auto_now_add=True)
+    date_updated = models.DateTimeField(auto_now=True)
 
 
 class Folder(models.Model):
@@ -61,7 +61,7 @@ class Folder(models.Model):
     is_public = models.BooleanField(default=True, verbose_name="public")
     sets = models.ManyToManyField(Set, blank=True, related_name="set_folder")
     date_created = models.DateTimeField(auto_now_add=True)
-    date_updated = models.DateTimeField(auto_now_add=True)
+    date_updated = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.name
