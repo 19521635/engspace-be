@@ -26,7 +26,7 @@ class UserProfileAPIView(generics.RetrieveUpdateAPIView):
     serializer_class = UserProfileSerializer
     queryset = User.objects.all()
 
-    @swagger_auto_schema(operation_summary="Get an owner's profile", tags=['users_profile'])
+    @swagger_auto_schema(operation_id='users_myprofile_read', operation_summary="Get an owner's profile", tags=['users_profile'])
     def get(self, request, *args, **kwargs):
         instance = self.request.user
         serializer = self.get_serializer(instance)
