@@ -35,19 +35,19 @@ class FolderDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     @swagger_auto_schema(operation_summary="Update an existing folder detail for this folder id")
     def put(self, request, pk, *args, **kwargs):
         instance = get_object_or_404(
-            request.user.folder, pk=pk)
+            request.user.folders, pk=pk)
         return self.update(request, *args, **kwargs)
 
     @swagger_auto_schema(operation_summary="Update partial an existing folder detail for this folder id")
     def patch(self, request, pk, *args, **kwargs):
         instance = get_object_or_404(
-            request.user.folder, pk=pk)
+            request.user.folders, pk=pk)
         return self.partial_update(request, *args, **kwargs)
 
     @swagger_auto_schema(operation_summary="Delete the specified folder by folder id")
     def delete(self, request, pk, *args, **kwargs):
         instance = get_object_or_404(
-            request.user.folder, pk=pk)
+            request.user.folders, pk=pk)
         return self.destroy(request, *args, **kwargs)
 
 
@@ -58,7 +58,7 @@ class FolderSetAPIVIew(APIView):
         serializer = FolderSetSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         folder = get_object_or_404(
-            request.user.folder, pk=request.data['folder_id'])
+            request.user.folders, pk=request.data['folder_id'])
         set = get_object_or_404(Set, pk=request.data['set_id'])
         Folder.add(folder, set)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -68,7 +68,7 @@ class FolderSetAPIVIew(APIView):
         serializer = FolderSetSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         folder = get_object_or_404(
-            request.user.folder, pk=request.data['folder_id'])
+            request.user.folders, pk=request.data['folder_id'])
         set = get_object_or_404(folder.sets, pk=request.data['set_id'])
         Folder.remove(folder, set)
         return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
@@ -111,19 +111,19 @@ class TopicDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     @swagger_auto_schema(operation_summary="Update an existing topic detail for this topic id")
     def put(self, request, pk, *args, **kwargs):
         instance = get_object_or_404(
-            request.user.topic, pk=pk)
+            request.user.topics, pk=pk)
         return self.update(request, *args, **kwargs)
 
     @swagger_auto_schema(operation_summary="Update partial an existing topic detail for this topic id")
     def patch(self, request, pk, *args, **kwargs):
         instance = get_object_or_404(
-            request.user.topic, pk=pk)
+            request.user.topics, pk=pk)
         return self.partial_update(request, *args, **kwargs)
 
     @swagger_auto_schema(operation_summary="Delete the specified topic by topic id")
     def delete(self, request, pk, *args, **kwargs):
         instance = get_object_or_404(
-            request.user.topic, pk=pk)
+            request.user.topics, pk=pk)
         return self.destroy(request, *args, **kwargs)
 
 
@@ -154,19 +154,19 @@ class SetDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     @swagger_auto_schema(operation_summary="Update an existing set detail for this set id")
     def put(self, request, pk, *args, **kwargs):
         instance = get_object_or_404(
-            request.user.set, pk=pk)
+            request.user.sets, pk=pk)
         return self.update(request, *args, **kwargs)
 
     @swagger_auto_schema(operation_summary="Update partial an existing set detail for this set id")
     def patch(self, request, pk, *args, **kwargs):
         instance = get_object_or_404(
-            request.user.set, pk=pk)
+            request.user.sets, pk=pk)
         return self.partial_update(request, *args, **kwargs)
 
     @swagger_auto_schema(operation_summary="Delete the specified set by set id")
     def delete(self, request, pk, *args, **kwargs):
         instance = get_object_or_404(
-            request.user.set, pk=pk)
+            request.user.sets, pk=pk)
         return self.destroy(request, *args, **kwargs)
 
 
@@ -182,7 +182,7 @@ class SetDetailListAPIView(generics.ListCreateAPIView):
     def post(self, request, *args, **kwargs):
         serializer = SetDetailSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        get_object_or_404(request.user.set, pk=request.data['set'])
+        get_object_or_404(request.user.sets, pk=request.data['set'])
         return super().post(request, *args, **kwargs)
 
 
@@ -198,19 +198,19 @@ class SetDetailDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     def put(self, request, pk, *args, **kwargs):
         set_detail = get_object_or_404(SetDetail, pk=pk)
         instance = get_object_or_404(
-            request.user.set, pk=set_detail.set.id)
+            request.user.sets, pk=set_detail.set.id)
         return self.update(request, *args, **kwargs)
 
     @swagger_auto_schema(operation_summary="Update partial an existing set detail for this set detail id")
     def patch(self, request, pk, *args, **kwargs):
         set_detail = get_object_or_404(SetDetail, pk=pk)
         instance = get_object_or_404(
-            request.user.set, pk=set_detail.set.id)
+            request.user.sets, pk=set_detail.set.id)
         return self.partial_update(request, *args, **kwargs)
 
     @swagger_auto_schema(operation_summary="Delete the specified set detail by set detail id")
     def delete(self, request, pk, *args, **kwargs):
         set_detail = get_object_or_404(SetDetail, pk=pk)
         instance = get_object_or_404(
-            request.user.set, pk=set_detail.set.id)
+            request.user.sets, pk=set_detail.set.id)
         return self.destroy(request, *args, **kwargs)

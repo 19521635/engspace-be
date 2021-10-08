@@ -11,9 +11,9 @@ class SetDetailSerializer(serializers.ModelSerializer):
 
 class SetAdminSerializer(serializers.ModelSerializer):
     user = serializers.ReadOnlyField(source='user.id')
-    set_detail = SetDetailSerializer(read_only=True, many=True)
+    set_details = SetDetailSerializer(read_only=True, many=True)
 
     class Meta:
         model = Set
         fields = ('id', 'is_public', 'name', 'description', 'date_created',
-                  'date_updated', 'user', 'topic', 'set_detail')
+                  'date_updated', 'user', 'topic', 'set_details')

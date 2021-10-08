@@ -43,15 +43,15 @@ class UserProfileSerializer(serializers.ModelSerializer):
         many=True, slug_field='following_user_id', read_only=True)
     followers = serializers.SlugRelatedField(
         many=True, slug_field='user_id', read_only=True)
-    folder = serializers.SlugRelatedField(
+    folders = serializers.SlugRelatedField(
         many=True, slug_field='id', read_only=True)
-    set = serializers.SlugRelatedField(
+    sets = serializers.SlugRelatedField(
         many=True, slug_field='id', read_only=True)
 
     class Meta:
         model = User
         fields = ('username', 'email', 'first_name', 'last_name',
-                  'dob', 'website', 'bio', 'fb_url', 'avatar', 'followers', 'following', 'folder', 'set')
+                  'dob', 'website', 'bio', 'fb_url', 'avatar', 'followers', 'following', 'folders', 'sets')
 
     def update(self, instance, validated_data):
         profile_data = validated_data.pop('profile', None)
@@ -84,15 +84,15 @@ class UserProfileDetailSerializer(serializers.ModelSerializer):
         many=True, slug_field='following_user_id', read_only=True)
     followers = serializers.SlugRelatedField(
         many=True, slug_field='user_id', read_only=True)
-    folder = serializers.SlugRelatedField(
+    folders = serializers.SlugRelatedField(
         many=True, slug_field='id', read_only=True)
-    set = serializers.SlugRelatedField(
+    sets = serializers.SlugRelatedField(
         many=True, slug_field='id', read_only=True)
 
     class Meta:
         model = User
         fields = ('username', 'first_name', 'last_name',
-                  'dob', 'website', 'bio', 'fb_url', 'avatar', 'followers', 'following', 'folder', 'set')
+                  'dob', 'website', 'bio', 'fb_url', 'avatar', 'followers', 'following', 'folders', 'sets')
 
 # Use this serializer to retrieve owner user status
 

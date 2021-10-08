@@ -30,13 +30,13 @@ class TopicSerializer(serializers.ModelSerializer):
     name = serializers.CharField(required=True, validators=[
                                  UniqueValidator(queryset=Topic.objects.all())])
     user = serializers.ReadOnlyField(source='user.id')
-    topic_set = serializers.SlugRelatedField(
+    topic_sets = serializers.SlugRelatedField(
         many=True, read_only=True, slug_field='id')
 
     class Meta:
         model = Topic
         fields = ('id', 'is_public', 'name', 'description',
-                  'date_created', 'date_updated', 'user', 'topic_set')
+                  'date_created', 'date_updated', 'user', 'topic_sets')
 
 # Use this serializer to retrieve a list of set_details, create a new set_detail
 # And retrieve/update/destroy set_detail by <id:int>
@@ -53,11 +53,11 @@ class SetDetailSerializer(serializers.ModelSerializer):
 
 class SetSerializer(serializers.ModelSerializer):
     user = serializers.ReadOnlyField(source='user.id')
-    set_folder = serializers.SlugRelatedField(
+    set_folders = serializers.SlugRelatedField(
         many=True, read_only=True, slug_field='id')
-    set_detail = SetDetailSerializer(read_only=True, many=True)
+    set_details = SetDetailSerializer(read_only=True, many=True)
 
     class Meta:
         model = Set
         fields = ('id', 'is_public', 'name', 'description', 'date_created',
-                  'date_updated', 'user', 'topic', 'set_folder', 'set_detail')
+                  'date_updated', 'user', 'topic', 'set_folders', 'set_details')
