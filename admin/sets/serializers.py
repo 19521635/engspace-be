@@ -3,7 +3,7 @@ from rest_framework import serializers
 from main.models import Set, SetDetail
 
 
-class SetDetailSerializer(serializers.ModelSerializer):
+class SetDetailAdminSerializer(serializers.ModelSerializer):
     class Meta:
         model = SetDetail
         fields = '__all__'
@@ -11,7 +11,7 @@ class SetDetailSerializer(serializers.ModelSerializer):
 
 class SetAdminSerializer(serializers.ModelSerializer):
     user = serializers.ReadOnlyField(source='user.id')
-    set_details = SetDetailSerializer(read_only=True, many=True)
+    set_details = SetDetailAdminSerializer(read_only=True, many=True)
 
     class Meta:
         model = Set
