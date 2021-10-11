@@ -27,7 +27,7 @@ class UserProfileListAPIView(generics.ListCreateAPIView):
     serializer_class = UserProfileListAdminSerializer
 
 
-class UserProfileDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
+class UserProfileDetailAPIView(generics.RetrieveUpdateAPIView):
     """Admin View To RetrieveUpdateDestroy User Profile"""
     permission_classes = (permissions.IsAdminUser,)
     queryset = UserProfile.objects.all()
