@@ -18,3 +18,17 @@ class UserDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = (permissions.IsAdminUser,)
     queryset = User.objects.all()
     serializer_class = UserDetailAdminSerializer
+
+
+class UserProfileListAPIView(generics.ListCreateAPIView):
+    """Admin View To Get List Or Create User Profile"""
+    permission_classes = (permissions.IsAdminUser,)
+    queryset = UserProfile.objects.all()
+    serializer_class = UserProfileListAdminSerializer
+
+
+class UserProfileDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
+    """Admin View To RetrieveUpdateDestroy User Profile"""
+    permission_classes = (permissions.IsAdminUser,)
+    queryset = UserProfile.objects.all()
+    serializer_class = UserProfileDetailAdminSerializer
