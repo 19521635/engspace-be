@@ -35,9 +35,6 @@ class UserProfileAPIView(generics.RetrieveUpdateAPIView):
     @swagger_auto_schema(operation_summary="Update an existing owner's profile", tags=['users_profile'])
     def put(self, request, *args, **kwargs):
         instance = self.request.user
-        request.data._mutable = True
-        request.data['username'] = instance.username
-        request.data._mutable = False
         serializer = UserProfileSerializer(instance, data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
