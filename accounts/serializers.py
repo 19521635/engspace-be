@@ -52,6 +52,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
         model = User
         fields = ('username', 'email', 'first_name', 'last_name',
                   'dob', 'website', 'bio', 'fb_url', 'avatar', 'followers', 'following', 'folders', 'sets')
+        extra_kwargs = {'username': {'read_only': True}}
 
     def update(self, instance, validated_data):
         profile_data = validated_data.pop('profile', None)
