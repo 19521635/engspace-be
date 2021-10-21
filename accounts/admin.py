@@ -33,9 +33,5 @@ class UserProfileAdmin(admin.ModelAdmin):
         return obj.user.is_staff
 
 
-class UserAdmin(BaseUserAdmin):
-    pass
-
-
-admin.site.register(User, UserAdmin)
+admin.site.register(User, BaseUserAdmin)
 admin.site.register(UserProfile, UserProfileAdmin)
