@@ -1,10 +1,15 @@
 from django.shortcuts import get_object_or_404, render
 from rest_framework import permissions, status, generics
 from rest_framework.response import Response
-from .serializers import UserFollowingSerializer, UserProfileDetailSerializer, UserProfileSerializer, UserProfileListSerializer, UserSignUpSerializer, UserStatusSerializer, UserFollowingCreateSerializer
+from rest_framework_simplejwt.views import TokenObtainPairView
+from .serializers import CustomTokenObtainPairSerializer, UserFollowingSerializer, UserProfileDetailSerializer, UserProfileSerializer, UserProfileListSerializer, UserSignUpSerializer, UserStatusSerializer, UserFollowingCreateSerializer
 from .models import User, UserFollowing
 from drf_yasg.utils import swagger_auto_schema
 # Create your views here.
+
+
+class CustomTokenObtainPairView(TokenObtainPairView):
+    serializer_class = CustomTokenObtainPairSerializer
 
 
 class UserSignUpAPIView(generics.CreateAPIView):
