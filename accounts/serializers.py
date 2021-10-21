@@ -1,6 +1,17 @@
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from .models import User, UserFollowing, UserProfile
+
+# Use this serializer to login
+
+
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+    def validate(self, attrs):
+        data = super(CustomTokenObtainPairSerializer, self).validate(attrs)
+        data.update({'username': self.user.username})
+        return data
+
 
 # Use this serializer to create a new user account
 
