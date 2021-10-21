@@ -1,7 +1,7 @@
 from django.urls import path
 from django.urls.conf import include
 from rest_framework_simplejwt import views as jwt_views
-from .views import UserSignUpAPIView, UserProfileAPIView, UserProfileListAPIView, UserProfileDetailAPIView, UserStatusAPIView, UserFollowingAPIView, UserFollowingCreateAPIView
+from .views import CustomTokenObtainPairView, UserSignUpAPIView, UserProfileAPIView, UserProfileListAPIView, UserProfileDetailAPIView, UserStatusAPIView, UserFollowingAPIView, UserFollowingCreateAPIView
 
 follow_urlpatterns = [
     path("", UserFollowingCreateAPIView.as_view(), name="user_follow_create"),
@@ -10,7 +10,7 @@ follow_urlpatterns = [
 ]
 
 login_urlpatterns = [
-    path("", jwt_views.TokenObtainPairView.as_view(), name="token_create"),
+    path("", CustomTokenObtainPairView.as_view(), name="token_create"),
     path("refresh/", jwt_views.TokenRefreshView.as_view(), name="token_refresh"),
 ]
 
