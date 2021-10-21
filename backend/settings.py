@@ -27,7 +27,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-(a6bjezexpz_9gvoigpsbyko08&qtndyg8!z3)g_)u05guuvrr'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -46,7 +46,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'drf_yasg',
     'accounts',
-    'main'
+    'main',
+    'forum'
 ]
 
 MIDDLEWARE = [
@@ -90,10 +91,10 @@ DATABASES = {
     {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'engspace',
-        # 'USER': 'postgres',
-        # 'PASSWORD': 'postgres',
-        # 'HOST': 'localhost',
-        # 'PORT': '5432'
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
+        'HOST': 'localhost',
+        'PORT': '5432'
     }
 }
 
