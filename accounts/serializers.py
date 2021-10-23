@@ -1,3 +1,4 @@
+from django.db.models import fields
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
@@ -149,3 +150,12 @@ class UserFollowingSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserFollowing
         fields = ('id', 'followers', 'following')
+
+# Use this serializer to retrieve users
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id', 'username', 'email',
+                  'first_name', 'last_name', 'is_staff')
