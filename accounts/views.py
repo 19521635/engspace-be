@@ -136,7 +136,7 @@ class UserFollowingAPIView(generics.RetrieveUpdateDestroyAPIView):
 
 class UserListAPIView(generics.ListAPIView):
     """View To Get List Of All Users"""
-    permissions = (permissions.AllowAny,)
+    permission_classes = (permissions.AllowAny,)
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
@@ -147,7 +147,7 @@ class UserListAPIView(generics.ListAPIView):
 
 class UserDetailAPIView(generics.RetrieveAPIView):
     """View To Get User Details"""
-    permissions = (permissions.AllowAny,)
+    permission_classes = (permissions.AllowAny,)
     serializer_class = UserSerializer
     queryset = User.objects.all()
 
