@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404, render
 from rest_framework import permissions, status, generics
 from rest_framework.response import Response
 from rest_framework_simplejwt.views import TokenObtainPairView
-from .serializers import CustomTokenObtainPairSerializer, UserFollowingSerializer, UserProfileDetailSerializer, UserProfileSerializer, UserProfileListSerializer, UserSignUpSerializer, UserStatusSerializer, UserFollowingCreateSerializer
+from .serializers import *
 from .models import User, UserFollowing
 from drf_yasg.utils import swagger_auto_schema
 # Create your views here.
@@ -132,3 +132,25 @@ class UserFollowingAPIView(generics.RetrieveUpdateDestroyAPIView):
             UserFollowing, user=request.user, following_user=pk)
         userfollowing.delete()
         return Response({'detail': 'Follow deleted.'}, status=status.HTTP_204_NO_CONTENT)
+
+
+class UserListAPIView(generics.ListAPIView):
+    """View To Get List Of All Users"""
+    permissions = (permissions.AllowAny,)
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+    @swagger_auto_schema(operation_summary="Retrieve a list of all user details", tags=['users_detail'])
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
+
+
+class UserDetailAPIView(generics.RetrieveAPIView):
+    """View To Get User Details"""
+    permissions = (permissions.AllowAny,)
+    serializer_class = UserSerializer
+    queryset = User.objects.all()
+
+    @swagger_auto_schema(operation_summary="Get an owner's profile", tags=['users_detail'])
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
