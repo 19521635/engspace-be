@@ -1,7 +1,7 @@
 from django.urls import path
 from django.urls.conf import include
 from rest_framework_simplejwt import views as jwt_views
-from .views import CustomTokenObtainPairView, UserSignUpAPIView, UserProfileAPIView, UserProfileListAPIView, UserProfileDetailAPIView, UserStatusAPIView, UserFollowingAPIView, UserFollowingCreateAPIView
+from .views import CustomTokenObtainPairView, UserDetailAPIView, UserListAPIView, UserSignUpAPIView, UserProfileAPIView, UserProfileListAPIView, UserProfileDetailAPIView, UserStatusAPIView, UserFollowingAPIView, UserFollowingCreateAPIView
 
 follow_urlpatterns = [
     path("", UserFollowingCreateAPIView.as_view(), name="user_follow_create"),
@@ -20,6 +20,8 @@ profile_urlpatterns = [
 ]
 
 urlpatterns = [
+    path("", UserListAPIView.as_view()),
+    path("<int:pk>/", UserDetailAPIView.as_view()),
     path("login/", include(login_urlpatterns)),
     path("register/", UserSignUpAPIView.as_view(), name="user_create"),
     path("all/", UserProfileListAPIView.as_view(), name="user_list"),
