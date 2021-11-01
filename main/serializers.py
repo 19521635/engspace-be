@@ -26,12 +26,22 @@ class FolderSetSerializer(serializers.Serializer):
 # And retrieve/update/destroy topic by <id:int>
 
 
+class TopicSetSerializer(serializers.ModelSerializer):
+    amount = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Set
+        fields = ('id', 'name', 'user', 'amount')
+
+    def get_amount(self, obj):
+        return obj.set_details.all().count()
+
+
 class TopicSerializer(serializers.ModelSerializer):
     name = serializers.CharField(required=True, validators=[
                                  UniqueValidator(queryset=Topic.objects.all())])
     user = serializers.ReadOnlyField(source='user.id')
-    topic_sets = serializers.SlugRelatedField(
-        many=True, read_only=True, slug_field='id')
+    topic_sets = TopicSetSerializer(read_only=True, many=True)
 
     class Meta:
         model = Topic
