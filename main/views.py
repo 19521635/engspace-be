@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from rest_framework import generics, permissions, status
+from rest_framework import generics, permissions, status, filters
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from .serializers import FolderSerializer, SetDetailSerializer, SetSerializer, TopicSerializer, FolderSetSerializer
@@ -12,6 +12,8 @@ class FolderListAPIView(generics.ListCreateAPIView):
     serializer_class = FolderSerializer
     queryset = Folder.objects.all()
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('name', 'description')
 
     @swagger_auto_schema(operation_summary="Retrieve a list of all folders")
     def get(self, request, *args, **kwargs):
@@ -101,6 +103,8 @@ class TopicListAPIView(generics.ListCreateAPIView):
     serializer_class = TopicSerializer
     queryset = Topic.objects.all()
     permission_classes = (TopicCustomPermissions,)
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('name', 'description')
 
     @swagger_auto_schema(operation_summary="Retrieve a list of all topics")
     def get(self, request, *args, **kwargs):
@@ -146,6 +150,8 @@ class SetListAPIView(generics.ListCreateAPIView):
     serializer_class = SetSerializer
     queryset = Set.objects.all()
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('name', 'description')
 
     @swagger_auto_schema(operation_summary="Retrieve a list of all sets")
     def get(self, request, *args, **kwargs):
