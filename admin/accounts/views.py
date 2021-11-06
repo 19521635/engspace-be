@@ -1,7 +1,5 @@
 from django.shortcuts import get_object_or_404
-from rest_framework import permissions, status, generics
-from rest_framework.views import APIView
-from rest_framework.response import Response
+from rest_framework import permissions, generics, filters
 from drf_yasg.utils import swagger_auto_schema
 from accounts.models import *
 from .serializers import *
@@ -12,6 +10,8 @@ class UserListAPIView(generics.ListCreateAPIView):
     permission_classes = (permissions.IsAdminUser,)
     queryset = User.objects.all()
     serializer_class = UserListAdminSerializer
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('username', 'email', 'first_name', 'last_name')
 
     @swagger_auto_schema(operation_summary="Retrieve a list of all users")
     def get(self, request, *args, **kwargs):

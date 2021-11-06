@@ -1,4 +1,4 @@
-from rest_framework import permissions, generics
+from rest_framework import permissions, generics, filters
 from drf_yasg.utils import swagger_auto_schema
 from .serializers import *
 
@@ -8,6 +8,8 @@ class TopicListAPIView(generics.ListCreateAPIView):
     permission_classes = (permissions.IsAdminUser,)
     queryset = Topic.objects.all()
     serializer_class = TopicAdminSerializer
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('name', 'description')
 
     @swagger_auto_schema(operation_summary="Retrieve a list of all topics")
     def get(self, request, *args, **kwargs):
