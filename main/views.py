@@ -11,6 +11,7 @@ from drf_yasg.utils import swagger_auto_schema
 class FolderListAPIView(generics.ListCreateAPIView):
     serializer_class = FolderSerializer
     queryset = Folder.objects.all()
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     @swagger_auto_schema(operation_summary="Retrieve a list of all folders")
     def get(self, request, *args, **kwargs):
@@ -27,6 +28,7 @@ class FolderListAPIView(generics.ListCreateAPIView):
 class FolderDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = FolderSerializer
     queryset = Folder.objects.all()
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     @swagger_auto_schema(operation_summary="Retrieve a folder detail for this folder id")
     def get(self, request, *args, **kwargs):
@@ -76,8 +78,8 @@ class FolderSetAPIVIew(APIView):
 
 class TopicCustomPermissions(permissions.BasePermission):
     def has_permission(self, request, view):
-        if request.method == 'GET':
-            return bool(request.user and request.user.is_authenticated)
+        if request.method in permissions.SAFE_METHODS:
+            return True
         else:
             return bool(request.user and request.user.is_staff)
 
@@ -130,6 +132,7 @@ class TopicDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
 class SetListAPIView(generics.ListCreateAPIView):
     serializer_class = SetSerializer
     queryset = Set.objects.all()
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     @swagger_auto_schema(operation_summary="Retrieve a list of all sets")
     def get(self, request, *args, **kwargs):
@@ -146,6 +149,7 @@ class SetListAPIView(generics.ListCreateAPIView):
 class SetDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = SetSerializer
     queryset = Set.objects.all()
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     @swagger_auto_schema(operation_summary="Retrieve a set detail for this set id")
     def get(self, request, *args, **kwargs):
@@ -173,6 +177,7 @@ class SetDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
 class SetDetailListAPIView(generics.ListCreateAPIView):
     serializer_class = SetDetailSerializer
     queryset = SetDetail.objects.all()
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     @swagger_auto_schema(operation_summary="Retrieve a list of all set details")
     def get(self, request, *args, **kwargs):
@@ -189,6 +194,7 @@ class SetDetailListAPIView(generics.ListCreateAPIView):
 class SetDetailDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = SetDetailSerializer
     queryset = SetDetail.objects.all()
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     @swagger_auto_schema(operation_summary="Retrieve a set detail for this set detail id")
     def get(self, request, *args, **kwargs):

@@ -54,6 +54,7 @@ class UserProfileListAPIView(generics.ListAPIView):
     """View To Get List Of All Users"""
     queryset = User.objects.all()
     serializer_class = UserProfileListSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     @swagger_auto_schema(operation_summary="Retrieve a list of all user profiles", tags=['users_profile'])
     def get(self, request, *args, **kwargs):
@@ -64,6 +65,7 @@ class UserProfileDetailAPIView(generics.RetrieveAPIView):
     """View To Get Someone Profile Detail"""
     queryset = User.objects.all()
     serializer_class = UserProfileDetailSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     @swagger_auto_schema(operation_summary="Retrieve an user profile for this user id", tags=['users_profile'])
     def get(self, request, *args, **kwargs):
@@ -98,7 +100,7 @@ class UserFollowingAPIView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = UserFollowingSerializer
     queryset = UserFollowing.objects.all()
 
-    @swagger_auto_schema(operation_summary="Retrieve a list of all followers/following for this owner", tags=['users_follow'])
+    @swagger_auto_schema(operation_summary="Retrieve a list of all followers/following for this user id", tags=['users_follow'])
     def get(self, request, pk, *args, **kwargs):
         if pk is None:
             user = request.user
