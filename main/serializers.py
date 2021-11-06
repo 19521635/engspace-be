@@ -69,5 +69,5 @@ class SetSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Set
-        fields = ('id', 'is_public', 'name', 'description', 'date_created',
+        fields = ('id', 'is_public', 'name', 'description', 'image', 'date_created',
                   'date_updated', 'user', 'topic', 'set_folders', 'set_details')
