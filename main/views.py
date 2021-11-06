@@ -53,6 +53,19 @@ class FolderDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
         return self.destroy(request, *args, **kwargs)
 
 
+class FolderListByUserAPIView(generics.ListAPIView):
+    serializer_class = FolderSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def get_queryset(self):
+        user_id = self.kwargs['pk']
+        return Folder.objects.filter(user=user_id)
+
+    @swagger_auto_schema(operation_summary="Retrieve a list of all folders by user id")
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
+
+
 class FolderSetAPIVIew(APIView):
 
     @swagger_auto_schema(operation_summary="Save an existing set for this folder id")
@@ -172,6 +185,19 @@ class SetDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
         instance = get_object_or_404(
             request.user.sets, pk=pk)
         return self.destroy(request, *args, **kwargs)
+
+
+class SetListByUserAPIView(generics.ListAPIView):
+    serializer_class = SetSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def get_queryset(self):
+        user_id = self.kwargs['pk']
+        return Set.objects.filter(user=user_id)
+
+    @swagger_auto_schema(operation_summary="Retrieve a list of all sets by user id")
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
 
 
 class SetDetailListAPIView(generics.ListCreateAPIView):
