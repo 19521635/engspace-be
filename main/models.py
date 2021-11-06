@@ -18,9 +18,14 @@ class Topic(models.Model):
         return self.name
 
 
+def set_image_upload_to(instance, filename):
+    return 'set_imgs/%s/%s' % (instance.user.id, filename)
+
+
 class Set(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True, max_length=255, default="")
+    image = models.ImageField(blank=True, upload_to=set_image_upload_to)
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
                              on_delete=CASCADE, related_name='sets', related_query_name='set')
     topic = models.ForeignKey(Topic, on_delete=CASCADE,
