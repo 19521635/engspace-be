@@ -9,6 +9,9 @@ from django.dispatch import receiver
 class User(AbstractUser):
     pass
 
+    class Meta:
+        ordering = ["id"]
+
 
 class UserProfile(models.Model):
     user = models.OneToOneField(

@@ -17,6 +17,9 @@ class Topic(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        ordering = ['id']
+
 
 def set_image_upload_to(instance, filename):
     return 'set_imgs/%s/%s' % (instance.user.id, filename)
@@ -36,6 +39,9 @@ class Set(models.Model):
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        ordering = ['id']
 
 
 def term_image_upload_to(instance, filename):
@@ -72,6 +78,9 @@ class Folder(models.Model):
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        ordering = ['id']
 
     @classmethod
     def add(cls, folder, set):
