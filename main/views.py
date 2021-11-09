@@ -2,14 +2,14 @@ from django.shortcuts import render, get_object_or_404
 from rest_framework import generics, permissions, status, filters
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .serializers import FolderSerializer, SetDetailSerializer, SetSerializer, TopicSerializer, FolderSetSerializer
-from .models import Folder, Topic, Set, SetDetail
+from .serializers import *
+from .models import *
 from drf_yasg.utils import swagger_auto_schema
 # Create your views here.
 
 
 class FolderListAPIView(generics.ListCreateAPIView):
-    serializer_class = FolderSerializer
+    serializer_class = FolderListSerializer
     queryset = Folder.objects.all()
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     filter_backends = (filters.SearchFilter,)
@@ -100,7 +100,7 @@ class TopicCustomPermissions(permissions.BasePermission):
 
 
 class TopicListAPIView(generics.ListCreateAPIView):
-    serializer_class = TopicSerializer
+    serializer_class = TopicListSerializer
     queryset = Topic.objects.all()
     permission_classes = (TopicCustomPermissions,)
     filter_backends = (filters.SearchFilter,)
@@ -147,7 +147,7 @@ class TopicDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
 
 
 class SetListAPIView(generics.ListCreateAPIView):
-    serializer_class = SetSerializer
+    serializer_class = SetListSerializer
     queryset = Set.objects.all()
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     filter_backends = (filters.SearchFilter,)
