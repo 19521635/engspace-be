@@ -56,7 +56,7 @@ class FolderDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
 
 
 class FolderListByUserAPIView(generics.ListAPIView):
-    serializer_class = FolderListSerializer
+    serializer_class = FolderSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def get_queryset(self):
