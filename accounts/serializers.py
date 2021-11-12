@@ -10,6 +10,7 @@ from .models import User, UserFollowing, UserProfile
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
         data = super(CustomTokenObtainPairSerializer, self).validate(attrs)
+        data.update({'id': self.user.id})
         data.update({'username': self.user.username})
         data.update({'is_staff': self.user.is_staff})
         return data
