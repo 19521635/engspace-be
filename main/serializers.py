@@ -22,16 +22,33 @@ class SetDetailSerializer(serializers.ModelSerializer):
 # And retrieve/update/destroy set by <id:int>
 
 
+class SetCreateWithManySetDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SetDetail
+        exclude = ('set',)
+
+
 class SetListSerializer(serializers.ModelSerializer):
     user = SmallUserInformationSerializer(read_only=True)
     set_folders = serializers.SlugRelatedField(
         many=True, read_only=True, slug_field='id')
+    set_details = SetCreateWithManySetDetailSerializer(
+        write_only=True, many=True)
     amount = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Set
         fields = ('id', 'is_public', 'name', 'description', 'image', 'date_created',
-                  'date_updated', 'user', 'topic', 'set_folders', 'amount')
+                  'date_updated', 'user', 'topic', 'set_folders', 'amount', 'set_details')
+
+    def create(self, validated_data):
+        set_details_data = validated_data.pop('set_details')
+        set_model = Set.objects.create(**validated_data)
+        for set_detail_data in set_details_data:
+            set_detail_model = SetDetail.objects.create(
+                set=set_model, **set_detail_data)
+            set_model.set_details.add(set_detail_model)
+        return set_model
 
     def get_amount(self, obj):
         return obj.set_details.all().count()
