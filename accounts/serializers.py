@@ -181,16 +181,14 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
 
     def validate(self, attrs):
         if attrs['password'] != attrs['password2']:
-            raise serializers.ValidationError(
-                {"password": "Password fields didn't match."})
+            raise serializers.ValidationError("Password fields didn't match.")
 
         return attrs
 
     def validate_old_password(self, value):
         user = self.context['request'].user
         if not user.check_password(value):
-            raise serializers.ValidationError(
-                {"old_password": "Old password is not correct"})
+            raise serializers.ValidationError("Old password is not correct.")
         return value
 
     def update(self, instance, validated_data):
