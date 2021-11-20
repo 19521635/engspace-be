@@ -46,7 +46,7 @@ class UserSignUpSerializer(serializers.ModelSerializer):
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
-    email = serializers.EmailField(validators=[
+    email = serializers.EmailField(required=False, validators=[
                                    UniqueValidator(queryset=User.objects.all())])
     dob = serializers.DateField(
         source='profile.dob', required=False)
