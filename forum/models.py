@@ -56,7 +56,7 @@ class Comment(models.Model):
     post = models.ForeignKey(
         Post, on_delete=CASCADE, related_name='post_comments', related_query_name='post_comment')
     parent = models.ForeignKey(
-        'self', on_delete=CASCADE, related_name='childrens', related_query_name='children')
+        'self', on_delete=CASCADE, related_name='childrens', related_query_name='children', null=True, blank=True)
     body = models.TextField()
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
