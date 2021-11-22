@@ -51,7 +51,7 @@ INSTALLED_APPS = [
     'drf_yasg',
     'accounts',
     'main',
-    # 'forum'
+    'forum'
 ]
 
 MIDDLEWARE = [
