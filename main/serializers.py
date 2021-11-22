@@ -23,9 +23,12 @@ class SetDetailSerializer(serializers.ModelSerializer):
 
 
 class SetCreateWithManySetDetailSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(required=False)
+
     class Meta:
         model = SetDetail
-        exclude = ('set',)
+        fields = '__all__'
+        extra_kwargs = {'set': {'read_only': True}}
 
 
 class SetListSerializer(serializers.ModelSerializer):
@@ -58,16 +61,48 @@ class SetSerializer(serializers.ModelSerializer):
     user = SmallUserInformationSerializer(read_only=True)
     set_folders = serializers.SlugRelatedField(
         many=True, read_only=True, slug_field='id')
-    set_details = SetDetailSerializer(read_only=True, many=True)
+    set_details = SetCreateWithManySetDetailSerializer(
+        required=False, many=True)
 
     class Meta:
         model = Set
         fields = ('id', 'is_public', 'name', 'description', 'image', 'date_created',
                   'date_updated', 'user', 'topic', 'set_folders', 'set_details')
 
+    def update(self, instance, validated_data):
+        set_details_data = validated_data.pop('set_details', None)
+        set_model = instance
+        if (self.context['request'].user == set_model.user) and (set_details_data != None):
+            for set_detail_data in set_details_data:
+                set_detail_id = set_detail_data.get('id', None)
+                if set_detail_id:
+                    set_detail_item = SetDetail.objects.get(
+                        pk=set_detail_id, set=instance)
+                    if set_detail_item:
+                        set_detail_item.image = set_detail_data.get(
+                            'image', set_detail_item.image)
+                        set_detail_item.term = set_detail_data.get(
+                            'term', set_detail_item.term)
+                        set_detail_item.definition = set_detail_data.get(
+                            'definition', set_detail_item.definition)
+                        set_detail_item.term_lang = set_detail_data.get(
+                            'term_lang', set_detail_item.term_lang)
+                        set_detail_item.definition_lang = set_detail_data.get(
+                            'definition_lang', set_detail_item.definition_lang)
+                        set_detail_item.date_created = set_detail_data.get(
+                            'date_created', set_detail_item.date_created)
+                        set_detail_item.save()
+                    else:
+                        SetDetail.objects.create(
+                            set=instance, **set_detail_data)
+                else:
+                    SetDetail.objects.create(set=instance, **set_detail_data)
+        return super().update(instance, validated_data)
 
 # Use this serializer to retrieve a list of folders, create a new folder
 # And retrieve/update/destroy folder by <id:int>
+
+
 class FolderListSerializer(serializers.ModelSerializer):
     name = serializers.CharField(required=True)
     user = SmallUserInformationSerializer(read_only=True)
