@@ -48,6 +48,7 @@ class SetListSerializer(serializers.ModelSerializer):
         set_details_data = validated_data.pop('set_details')
         set_model = Set.objects.create(**validated_data)
         for set_detail_data in set_details_data:
+            set_detail_id = set_detail_data.pop('id', None)
             set_detail_model = SetDetail.objects.create(
                 set=set_model, **set_detail_data)
             set_model.set_details.add(set_detail_model)
