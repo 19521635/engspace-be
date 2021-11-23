@@ -60,6 +60,8 @@ class FolderListByUserAPIView(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def get_queryset(self):
+        if getattr(self, 'swagger_fake_view', False):
+            return Folder.objects.none()
         user_id = self.kwargs['pk']
         return Folder.objects.filter(user=user_id)
 
@@ -198,6 +200,8 @@ class SetListByUserAPIView(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def get_queryset(self):
+        if getattr(self, 'swagger_fake_view', False):
+            return Set.objects.none()
         user_id = self.kwargs['pk']
         return Set.objects.filter(user=user_id)
 
