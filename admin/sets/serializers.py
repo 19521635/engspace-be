@@ -10,7 +10,6 @@ class SetDetailAdminSerializer(serializers.ModelSerializer):
 
 
 class SetAdminSerializer(serializers.ModelSerializer):
-    user = serializers.ReadOnlyField(source='user.id')
     set_details = SetDetailAdminSerializer(read_only=True, many=True)
 
     class Meta:
