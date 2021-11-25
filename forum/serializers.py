@@ -17,6 +17,7 @@ class SmallUserInformationSerializer(serializers.ModelSerializer):
 
 class PostListSerializer(serializers.ModelSerializer):
     user = SmallUserInformationSerializer(read_only=True)
+    comments = SerializerMethodField(read_only=True)
     likes = SerializerMethodField(read_only=True)
     dislikes = SerializerMethodField(read_only=True)
 
@@ -29,10 +30,14 @@ class PostListSerializer(serializers.ModelSerializer):
 
     def get_dislikes(self, obj):
         return PostLike.objects.filter(post=obj, is_like=False).count()
+
+    def get_comments(self, obj):
+        return obj.post_comments.count()
 
 
 class PostDetailSerializer(serializers.ModelSerializer):
     user = SmallUserInformationSerializer(read_only=True)
+    comments = SerializerMethodField(read_only=True)
     likes = SerializerMethodField(read_only=True)
     dislikes = SerializerMethodField(read_only=True)
 
@@ -46,8 +51,11 @@ class PostDetailSerializer(serializers.ModelSerializer):
     def get_dislikes(self, obj):
         return PostLike.objects.filter(post=obj, is_like=False).count()
 
+    def get_comments(self, obj):
+        return obj.post_comments.count()
 
 # FORUM POST LIKE
+
 
 class PostLikeListSerializer(serializers.ModelSerializer):
     user = SmallUserInformationSerializer(read_only=True)
