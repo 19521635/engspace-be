@@ -7,7 +7,7 @@ class FolderListAPIView(generics.ListCreateAPIView):
     """Admin View To Get List Or Create Folder"""
     permission_classes = (permissions.IsAdminUser,)
     queryset = Folder.objects.all()
-    serializer_class = FolderAdminSerializer
+    serializer_class = FolderListAdminSerializer
     filter_backends = (filters.SearchFilter,)
     search_fields = ('name', 'description')
 
@@ -24,7 +24,7 @@ class FolderDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     """Admin View To RetrieveUpdateDestroy Folder"""
     permission_classes = (permissions.IsAdminUser,)
     queryset = Folder.objects.all()
-    serializer_class = FolderAdminSerializer
+    serializer_class = FolderDetailAdminSerializer
 
     @swagger_auto_schema(operation_summary="Retrieve a folder detail for this folder id")
     def get(self, request, *args, **kwargs):
