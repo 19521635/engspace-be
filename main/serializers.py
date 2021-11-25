@@ -28,7 +28,8 @@ class SetCreateWithManySetDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = SetDetail
         fields = '__all__'
-        extra_kwargs = {'set': {'read_only': True}}
+        extra_kwargs = {'set': {'read_only': True},
+                        'image': {'read_only': True}}
 
 
 class SetListSerializer(serializers.ModelSerializer):
