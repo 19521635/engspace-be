@@ -64,6 +64,9 @@ class Comment(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        ordering = ['id']
+
 
 class CommentLike(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=CASCADE,
