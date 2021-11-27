@@ -89,3 +89,11 @@ class Folder(models.Model):
     @classmethod
     def remove(cls, folder, set):
         folder.sets.remove(set)
+
+
+class UploadImage(models.Model):
+    name = models.CharField(max_length=255)
+    image = models.ImageField(upload_to="img/%Y/%m/%d")
+
+    def __str__(self):
+        return self.name
