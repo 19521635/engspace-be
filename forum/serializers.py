@@ -23,7 +23,7 @@ class PostListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        fields = '__all__'
+        exclude = ('body',)
 
     def get_likes(self, obj):
         return PostLike.objects.filter(post=obj, is_like=True).count()
