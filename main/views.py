@@ -2,8 +2,11 @@ from django.shortcuts import render, get_object_or_404
 from rest_framework import generics, permissions, status, filters
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.exceptions import ParseError
+from rest_framework.parsers import FileUploadParser
 from .serializers import *
 from .models import *
+from PIL import Image
 from drf_yasg.utils import swagger_auto_schema
 # Create your views here.
 
@@ -256,3 +259,46 @@ class SetDetailDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
         instance = get_object_or_404(
             request.user.sets, pk=set_detail.set.id)
         return self.destroy(request, *args, **kwargs)
+
+
+class ImageUploadParser(FileUploadParser):
+    media_type = 'image/*'
+
+
+class MyUploadView(generics.UpdateAPIView):
+    parser_class = (ImageUploadParser,)
+    serializer_class = UploadImageSerializer
+
+    @swagger_auto_schema(operation_summary="Upload new image using put method")
+    def put(self, request):
+        if 'file' not in request.data:
+            raise ParseError("Empty content")
+
+        f = request.data['file']
+
+        try:
+            img = Image.open(f)
+            img.verify()
+        except:
+            raise ParseError("Unsupported image type")
+
+        instance = UploadImage.objects.create(name=f.name, image=f)
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)
+
+    @swagger_auto_schema(operation_summary="Upload new image using patch method")
+    def patch(self, request, *args, **kwargs):
+        if 'file' not in request.data:
+            raise ParseError("Empty content")
+
+        f = request.data['file']
+
+        try:
+            img = Image.open(f)
+            img.verify()
+        except:
+            raise ParseError("Unsupported image type")
+
+        instance = UploadImage.objects.create(name=f.name, image=f)
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)

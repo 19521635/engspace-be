@@ -1,6 +1,7 @@
 from rest_framework import serializers
+from rest_framework.fields import ReadOnlyField
 from rest_framework.validators import UniqueValidator
-from .models import Folder, Topic, Set, SetDetail
+from .models import Folder, Topic, Set, SetDetail, UploadImage
 from accounts.models import User
 
 
@@ -176,3 +177,11 @@ class TopicSerializer(serializers.ModelSerializer):
         model = Topic
         fields = ('id', 'is_public', 'name', 'description',
                   'date_created', 'date_updated', 'user', 'topic_sets')
+
+
+class UploadImageSerializer(serializers.ModelSerializer):
+    name = ReadOnlyField()
+
+    class Meta:
+        model = UploadImage
+        fields = '__all__'

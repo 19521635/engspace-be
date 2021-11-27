@@ -12,5 +12,6 @@ urlpatterns = [
     path("sets/user/<int:pk>/", SetListByUserAPIView.as_view()),
     path("set-details/", SetDetailListAPIView.as_view()),
     path("set-details/<int:pk>/", SetDetailDetailAPIView.as_view()),
-    path("folder-sets/", FolderSetAPIVIew.as_view())
+    path("folder-sets/", FolderSetAPIVIew.as_view()),
+    path("upload/", MyUploadView.as_view())
 ]
