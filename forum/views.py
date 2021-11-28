@@ -1,4 +1,4 @@
-from rest_framework import generics, permissions
+from rest_framework import generics, permissions, filters
 from django.shortcuts import get_object_or_404
 from .serializers import *
 from .models import *
@@ -14,6 +14,8 @@ class PostListAPIView(generics.ListCreateAPIView):
     queryset = Post.objects.all()
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     serializer_class = PostListSerializer
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('name', 'body',)
 
     @swagger_auto_schema(operation_summary="Retrieve a list of all posts")
     def get(self, request, *args, **kwargs):
@@ -218,6 +220,8 @@ class CommentListAPIView(generics.ListCreateAPIView):
     queryset = Comment.objects.all()
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     serializer_class = CommentListSerializer
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('body',)
 
     @swagger_auto_schema(operation_summary="Retrieve a list of all comments")
     def get(self, request, *args, **kwargs):
