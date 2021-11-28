@@ -1,4 +1,4 @@
-from rest_framework import generics, permissions
+from rest_framework import generics, permissions, filters
 from django.shortcuts import get_object_or_404
 from .serializers import *
 from forum.models import *
@@ -12,6 +12,8 @@ class CommentListAPIView(generics.ListCreateAPIView):
     queryset = Comment.objects.all()
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     serializer_class = AdminCommentListSerializer
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('body',)
 
     @swagger_auto_schema(operation_summary="Retrieve a list of all comments")
     def get(self, request, *args, **kwargs):
