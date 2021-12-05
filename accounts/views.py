@@ -194,9 +194,9 @@ class ResetPasswordAPIView(APIView):
         key = base64.b32encode(keygen.returnValue(email).encode())
         OTP = pyotp.TOTP(key, interval=120)
         subject = "Engspace - Reset your password"
-        msg = f"Chào {user.username},\nMã xác nhận để khôi phục mật khẩu của bạn là: {OTP.now()}\nTrân trọng!\nEngspace"
+        msg = f"Chào {user.username},\n\nMã xác nhận để khôi phục mật khẩu của bạn là: {OTP.now()}\n\nTrân trọng!\nEngspace"
         to = user.email
-        res = send_mail(subject, msg, settings.EMAIL_HOST_USER, [to])
+        res = send_mail(subject, msg, settings.DEFAULT_FROM_EMAIL, [to])
         if(res == 1):
             return Response({'OTP': ['Sent.']}, status=status.HTTP_200_OK)
         return Response({'OTP': ['Failed.']}, status=status.HTTP_400_BAD_REQUEST)
@@ -218,5 +218,5 @@ class ResetPasswordAPIView(APIView):
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
-            return Response({"detail": "failed"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"detail": ["Failed."]}, status=status.HTTP_400_BAD_REQUEST)
         return Response({}, status=status.HTTP_400_BAD_REQUEST)
