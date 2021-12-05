@@ -1,10 +1,16 @@
 from django.shortcuts import get_object_or_404
 from rest_framework import permissions, status, generics
+from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework_simplejwt.views import TokenObtainPairView
 from .serializers import *
 from .models import User, UserFollowing
 from drf_yasg.utils import swagger_auto_schema
+from datetime import datetime
+import base64
+import pyotp
+from django.core.mail import send_mail
+from django.conf import settings
 # Create your views here.
 
 
@@ -170,3 +176,47 @@ class ChangePasswordAPIView(generics.UpdateAPIView):
     @swagger_auto_schema(operation_summary="Change an existing owner's password", tags=['users_profile'])
     def patch(self, request, *args, **kwargs):
         return super().patch(request, *args, **kwargs)
+
+
+class GenerateKey:
+    @staticmethod
+    def returnValue(email):
+        return str(email)+str(datetime.date(datetime.now()))+"7A5rUOiwPG596u1Og6HzmlW2tKs54GZK"
+
+
+class ResetPasswordAPIView(APIView):
+    permission_classes = [permissions.AllowAny]
+    """View To Reset User Password"""
+    @swagger_auto_schema(operation_summary="Send OTP code to reset password", tags=['send_otp'])
+    def get(self, request, email, *args, **kwargs):
+        user = get_object_or_404(User, email=email)
+        keygen = GenerateKey()
+        key = base64.b32encode(keygen.returnValue(email).encode())
+        OTP = pyotp.TOTP(key, interval=120)
+        subject = "Engspace - Reset your password"
+        msg = f"Chào {user.username},\nMã xác nhận để khôi phục mật khẩu của bạn là: {OTP.now()}\nTrân trọng!\nEngspace"
+        to = user.email
+        res = send_mail(subject, msg, settings.EMAIL_HOST_USER, [to])
+        if(res == 1):
+            return Response({'OTP': ['Sent.']}, status=status.HTTP_200_OK)
+        return Response({'OTP': ['Failed.']}, status=status.HTTP_400_BAD_REQUEST)
+
+    @swagger_auto_schema(operation_summary="Reset password using OTP code", tags=['reset_password'])
+    def post(self, request, email, *args, **kwargs):
+        user = get_object_or_404(User, email=email)
+        keygen = GenerateKey()
+        key = base64.b32encode(keygen.returnValue(email).encode())
+        OTP = pyotp.TOTP(key, interval=120)
+        try:
+            otp_data = request.data["OTP"]
+        except KeyError:
+            return Response({"OTP": ["This field is required."]}, status=status.HTTP_400_BAD_REQUEST)
+        if OTP.verify(otp_data):  # Verifying the OTP
+            serializer = ResetPasswordSerializer(data=request.data)
+            serializer.context['email'] = user.email
+            if serializer.is_valid(raise_exception=True):
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response({"detail": "failed"}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({}, status=status.HTTP_400_BAD_REQUEST)

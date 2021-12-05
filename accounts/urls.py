@@ -29,4 +29,6 @@ urlpatterns = [
     path("profile/", include(profile_urlpatterns)),
     path("status/", UserStatusAPIView.as_view(), name="user_status"),
     path("follow/", include(follow_urlpatterns)),
+    path("reset-password/<email>/",
+         ResetPasswordAPIView.as_view(), name="reset_password")
 ]

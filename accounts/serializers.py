@@ -197,3 +197,25 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
         instance.save()
 
         return instance
+
+
+class ResetPasswordSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(
+        write_only=True, required=True, validators=[validate_password])
+    password2 = serializers.CharField(write_only=True, required=True)
+
+    class Meta:
+        model = User
+        fields = ('password', 'password2')
+
+    def validate(self, attrs):
+        if attrs['password'] != attrs['password2']:
+            raise serializers.ValidationError("Password fields didn't match.")
+
+        return attrs
+
+    def create(self, validated_data):
+        instance = self.Meta.model.objects.get(email=self.context.get('email'))
+        instance.set_password(validated_data['password'])
+        instance.save()
+        return instance
