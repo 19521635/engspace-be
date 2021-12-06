@@ -218,5 +218,5 @@ class ResetPasswordAPIView(APIView):
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
-            return Response({"detail": ["Failed."]}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"OTP": ["The OTP you've entered is incorrect."]}, status=status.HTTP_400_BAD_REQUEST)
         return Response({}, status=status.HTTP_400_BAD_REQUEST)
