@@ -67,7 +67,7 @@ class UserProfileListAPIView(generics.ListAPIView):
         return super().get(request, *args, **kwargs)
 
 
-class UserProfileDetailAPIView(generics.RetrieveAPIView):
+class UserProfileDetailAPIView(generics.RetrieveDestroyAPIView):
     """View To Get Someone Profile Detail"""
     queryset = User.objects.all()
     serializer_class = UserProfileDetailSerializer
@@ -76,6 +76,15 @@ class UserProfileDetailAPIView(generics.RetrieveAPIView):
     @swagger_auto_schema(operation_summary="Retrieve an user profile for this user id", tags=['users_profile'])
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
+
+    @swagger_auto_schema(operation_summary="Delete owner's account")
+    def delete(self, request, pk, *args, **kwargs):
+        instance = get_object_or_404(
+            User, pk=pk)
+        if instance == self.request.user:
+            return self.destroy(request, *args, **kwargs)
+        else:
+            return Response({"detail": "Not found."}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class UserStatusAPIView(generics.RetrieveAPIView):
