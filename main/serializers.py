@@ -97,9 +97,10 @@ class SetSerializer(serializers.ModelSerializer):
                         set_detail_item.save()
                     else:
                         SetDetail.objects.create(
-                            set=instance, **set_detail_data)
+                            set=instance, term=set_detail_data.get('term', None), definition=set_detail_data.get('definition', None), term_lang=set_detail_data.get('term_lang', 'en'), definition_lang=set_detail_data.get('definition_lang', 'vi'))
                 else:
-                    SetDetail.objects.create(set=instance, **set_detail_data)
+                    SetDetail.objects.create(
+                        set=instance, term=set_detail_data.get('term', None), definition=set_detail_data.get('definition', None), term_lang=set_detail_data.get('term_lang', 'en'), definition_lang=set_detail_data.get('definition_lang', 'vi'))
         return super().update(instance, validated_data)
 
 # Use this serializer to retrieve a list of folders, create a new folder
